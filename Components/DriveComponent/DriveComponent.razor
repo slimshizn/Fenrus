@@ -1,0 +1,126 @@
+@using Fenrus.Models
+@namespace Fenrus.Components
+
+<div id="fdrive-wrapper" class="dashboard-drive collapsed">
+    <div class="expander" onclick="fDriveDrawer.toggle()">
+        <i class="fa-solid fa-chevron-right"></i>
+        <span><i class="fa-solid fa-cloud"></i> Fenrus</span>
+    </div>
+    <div class="resizer"></div>
+    <div class="fdrive-inner">
+        <div class="fdrive-modes">
+            @if (NotesEnabled)
+            {
+                <div id="fdrive-notes">
+                    <div class="fdrive-pane-title">
+                        <div id="nt-personal">@lblPersonal</div>
+                        <div id="nt-dashboard">@lblDashboard</div>
+                        <div id="nt-shared">@lblShared</div>
+                    </div>
+                    <div class="content" id="notes-list">
+                    </div>
+                    <div class="fdrive-add-button">
+                        <i class="fa-solid fa-plus"></i>
+                    </div>
+                </div>
+            }
+
+            @if (FilesEnabled)
+            {
+                <div id="fdrive-files">
+                    <div class="fdrive-pane-title">
+                        <div id="fdrive-files-address"></div>
+                        <div class="toolbar"></div>
+                    </div>
+                    <div class="content" id="fdrive-list">
+                    </div>
+                    <div class="fdrive-add-button">
+                        <ul id="fdrive-add-menu">
+                            <li class="new-folder"><i class="fa-solid fa-folder-plus"></i>New Folder</li>
+                            <li class="separator"></li>
+                            <li class="upload"><i class="fa-solid fa-upload"></i>Upload File</li>
+                        </ul>
+                        <i class="fa-solid fa-plus"></i>
+                    </div>
+                </div>
+            }
+
+            @if (CalendarEnabled)
+            {
+                <div id="fdrive-calendar">
+                    <div class="fdrive-pane-title">
+                        <span class="title">@lblCalendar</span>
+                    </div>
+                    <div class="content" id="calendar-actual">
+                    </div>
+                    <div class="fdrive-add-button add-button">
+                        <i class="fa-solid fa-plus"></i>
+                    </div>
+                </div>
+            }
+
+            @if (EmailEnabled)
+            {
+                <div id="fdrive-email">
+                    <div class="fdrive-pane-title">
+                        <span class="title">@lblEmail</span>
+                    </div>
+                    <div class="content" id="email-actual">
+                    </div>
+                </div>
+            }
+
+            @if (AppsEnabled && UserProfile.AppGroups?.Any() == true)
+            {
+                <div id="fdrive-apps">
+                    <div class="fdrive-pane-title">
+                        <span class="title">Apps</span>
+                    </div>
+                    <div class="content" id="apps-actual">
+                        @foreach (var grp in UserProfile.AppGroups)
+                        {
+                            <div class="group">
+                                <span class="title">@grp.Name</span>
+                                <div class="apps">
+                                    @foreach (var app in grp.Items)
+                                    {
+                                        <div class="drive-app type-@app.Type.ToString().ToLowerInvariant()" data-app-type="@app.Type" data-src="@GetAddress(app)" x-uid="@app.Uid">
+                                            <div class="drive-app-inner">
+                                                <span class="icon">
+                                                    @if (string.IsNullOrEmpty(app.Icon))
+                                                    {
+                                                        <img draggable="false" src="/favicon?version=@Globals.Version"/>
+                                                    }
+                                                    else if (app.Icon.StartsWith("db:/image/"))
+                                                    {
+                                                        <img src="/fimage/@app.Icon["db:/image/".Length..]?version=@Globals.Version" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <img draggable="false" src="@app.Icon"/>
+                                                    }
+                                                    @if (app.Type == CloudAppType.Internal)
+                                                    {
+                                                        <img class="shortcut" src="/images/internal.svg" />
+                                                    }
+                                                    else if(app.Type == CloudAppType.External || app.Type == CloudAppType.ExternalSame)
+                                                    {
+                                                        <img class="shortcut" src="/images/shortcut.svg" />
+                                                    }
+                                                </span>
+                                                <span class="name">@app.Name</span>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="fdrive-tabs" id="fdrive-tabs">
+        </div>
+    </div>
+</div>

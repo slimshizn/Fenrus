@@ -1,4 +1,6 @@
-﻿body.settings 
+﻿.fenrus-page-body,
+.side-editor,
+body.initial-config-page
 {
     .main-content{
         display: flex;
@@ -7,9 +9,12 @@
             margin:auto;
         }
     }
-
-
-    input[type=text], input[type=password], input[type=number], select {
+    
+    .page-description {
+        white-space:pre-wrap;
+    }
+    
+    input[type=text], input[type=password], input[type=number], input[type=email], select {
         width: calc(100% - 1rem);
         padding: 0.5rem;
         background: var(--input-background);
@@ -135,23 +140,6 @@
                     text-align: center;
                 }
 
-                .controls {
-                    text-align: right;
-                    white-space: nowrap;
-
-                    a, span {
-                        margin-left: 0.5rem;
-                        cursor: pointer;
-                        color: white;
-                        opacity: 0.7;
-                        text-decoration:none !important;
-
-                        &:hover {
-                            opacity: 1;
-                        }
-                    }
-                }
-
                 &.over {
                     border: 3px dotted #666;
                 }
@@ -192,6 +180,27 @@
         }
     }
 
+    td.controls {        
+        padding-right: 1rem;
+    }
+
+
+    .controls {
+        text-align: right;
+        white-space: nowrap;
+
+        a, span {
+            margin-left: 0.5rem;
+            cursor: pointer;
+            color: white;
+            opacity: 0.7;
+            text-decoration:none !important;
+
+            &:hover {
+                opacity: 1;
+            }
+        }
+    }
 
     #file-chooser-btn {
         display: block;
@@ -254,7 +263,7 @@
             display:flex;
             flex-direction: row;
             .btn + .btn {
-                margin-left:1rem;
+                margin-left:1rem !important;
             }
         }
     }
@@ -326,7 +335,6 @@
     }
     .help-text 
     {
-        padding-top: 0.5rem;
         display: block;
         font-style: italic;
         color: var(--color-darkest);
@@ -363,13 +371,6 @@
                 color: #ff0090;
                 font-style: italic;
             }
-        }
-        .version-info {
-            padding-top:1rem;
-            height: 3rem;
-            text-align: center;
-            color: rgba(var(--color-rgb),.4);
-            font-size: 1.15rem;
         }
         .group {
             margin-top:2rem;
@@ -535,6 +536,7 @@
 
     .preview-dashboard {
         overflow: auto;
+        flex-grow:1;
         .db-item {
             .actions {            
                 display:none;
@@ -557,21 +559,6 @@
                     display: flex;
                     flex-flow: wrap;
                 }
-            }
-        }
-    }
-
-    .initial-config {
-        background:rgba(0,0,0, 0.8);    
-        width: min(70vw, 700px);
-        .header {
-            display:flex;
-            flex-direction: row;        
-            margin-bottom: 1rem;
-            .title {
-                flex-grow:1;
-                font-size: 1.5rem;
-                margin-left: calc(1rem - 1px);
             }
         }
     }

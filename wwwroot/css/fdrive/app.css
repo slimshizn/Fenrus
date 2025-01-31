@@ -1,0 +1,209 @@
+#fdrive-apps {
+  --grid-width: 7rem;
+  --grid-height: 7.5rem;
+  --font-size:1rem;
+}
+#fdrive-apps #apps-actual {
+  padding: 1rem;
+  width: calc(100% - 2rem);
+  height: calc(100% - var(--tabs-height));
+  user-select: none;
+}
+#fdrive-apps .group + .group {
+  margin-top: 1rem;
+}
+#fdrive-apps .group > .title {
+  display: block;
+  font-size: calc(var(--font-size) * 1.1);
+  margin: 0 0 0.5rem 0.5rem;
+  text-transform: uppercase;
+}
+#fdrive-apps .group .apps {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--grid-width), 1fr));
+  grid-auto-rows: var(--grid-height);
+  grid-gap: 0;
+}
+#fdrive-apps .drive-app {
+  width: 100%;
+  height: var(--grid-height);
+}
+#fdrive-apps .drive-app.selected .drive-app-inner {
+  background: rgba(var(--accent-rgb), 0.3) !important;
+}
+#fdrive-apps .drive-app.selected .drive-app-inner:hover {
+  background: rgba(var(--accent-rgb), 0.4) !important;
+}
+#fdrive-apps .drive-app-inner {
+  position: relative;
+  overflow: hidden;
+  margin: 0.25rem;
+  padding: 0.25rem;
+  width: calc(100% - 1rem);
+  height: calc(100% - 1rem);
+  border-radius: 0.5rem;
+}
+#fdrive-apps .drive-app-inner:hover {
+  background: rgba(var(--accent-rgb), 0.4) !important;
+}
+#fdrive-apps .name {
+  text-align: center;
+  word-break: break-word;
+  display: block;
+  font-size: var(--font-size);
+  height: calc(45% - 0.5rem);
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+#fdrive-apps .icon {
+  width: calc(100% - 2rem);
+  padding: 0 1rem 0.25rem;
+  height: 60%;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  margin-bottom: 0.25rem;
+}
+#fdrive-apps .icon img:not(.shortcut) {
+  border-radius: 0.25rem;
+  object-fit: contain;
+  max-width: 120%;
+}
+#fdrive-apps .icon i {
+  font-size: 10rem;
+}
+#fdrive-apps .shortcut {
+  position: absolute;
+  width: 1.5rem;
+  height: 1.5rem;
+  object-fit: contain;
+  bottom: 0.25rem;
+  left: 0.5rem;
+}
+
+#fdrive-apps-iframe, #fdrive-apps-terminal {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 2rem;
+  height: calc(100% - 4rem);
+  width: calc(100% - 4rem);
+  transition: transform 0.2s ease-in-out;
+  transform: translateX(100%);
+  background: var(--base);
+  flex-direction: column;
+  background: #1e1e1e;
+}
+#fdrive-apps-iframe.visible, #fdrive-apps-terminal.visible {
+  transform: translateX(0);
+  display: flex;
+  z-index: 5;
+}
+#fdrive-apps-iframe .app-target-container, #fdrive-apps-terminal .app-target-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border: 1px solid #090909;
+  background-color: #222;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  color: var(--color);
+  border-radius: 1rem;
+}
+#fdrive-apps-iframe .app-target-container .header, #fdrive-apps-terminal .app-target-container .header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(100% - 2rem);
+  height: 50px;
+  background-color: #2a2a2a;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+}
+#fdrive-apps-iframe .app-target-container .header .controls, #fdrive-apps-terminal .app-target-container .header .controls {
+  display: flex;
+  align-items: center;
+}
+#fdrive-apps-iframe .app-target-container .header .controls button + button, #fdrive-apps-terminal .app-target-container .header .controls button + button {
+  margin-left: 0.75rem;
+}
+#fdrive-apps-iframe .app-target-container .header .controls button, #fdrive-apps-terminal .app-target-container .header .controls button {
+  color: var(--color);
+  border: none;
+  font-size: 1rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+#fdrive-apps-iframe .app-target-container .header .controls .btn-newtab, #fdrive-apps-terminal .app-target-container .header .controls .btn-newtab {
+  background: var(--info);
+}
+#fdrive-apps-iframe .app-target-container .header .controls .btn-refresh, #fdrive-apps-terminal .app-target-container .header .controls .btn-refresh {
+  background: var(--success);
+}
+#fdrive-apps-iframe .app-target-container .header .controls .btn-close, #fdrive-apps-terminal .app-target-container .header .controls .btn-close {
+  background-color: var(--danger);
+}
+#fdrive-apps-iframe .app-target-container .header .address-bar, #fdrive-apps-terminal .app-target-container .header .address-bar {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+  transition: background-color 0.2s ease-in-out;
+  background-color: #090909;
+  border-radius: 0.75rem;
+  padding: 0.5rem 1rem;
+  margin-right: 10px;
+  width: calc(100% - 3rem);
+  display: flex;
+  flex-direction: row;
+}
+#fdrive-apps-iframe .app-target-container .header .address-bar img:not(.shortcut), #fdrive-apps-terminal .app-target-container .header .address-bar img:not(.shortcut) {
+  height: 90%;
+  width: 2rem;
+  margin-right: 0.5rem;
+  object-fit: contain;
+}
+#fdrive-apps-iframe .app-target-container .header .address-bar input[type=text], #fdrive-apps-terminal .app-target-container .header .address-bar input[type=text] {
+  height: 1.5rem;
+  border: none;
+  font-size: 1.1rem;
+  background: transparent;
+  flex-grow: 1;
+  color: var(--color);
+}
+#fdrive-apps-iframe .app-target-container .header .address-bar input[type=text]:focus, #fdrive-apps-terminal .app-target-container .header .address-bar input[type=text]:focus {
+  background-color: black;
+  outline: none;
+}
+#fdrive-apps-iframe .app-target-container .inner-container, #fdrive-apps-terminal .app-target-container .inner-container {
+  position: absolute;
+  top: 50px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+}
+#fdrive-apps-iframe .app-target-container .inner-container iframe, #fdrive-apps-iframe .app-target-container .inner-container > div, #fdrive-apps-terminal .app-target-container .inner-container iframe, #fdrive-apps-terminal .app-target-container .inner-container > div {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+}
+#fdrive-apps-iframe .app-target-container .inner-container > div, #fdrive-apps-terminal .app-target-container .inner-container > div {
+  width: calc(100% - 2rem);
+  height: calc(100% - 2rem);
+  padding: 1rem;
+  background: #000;
+}
+
+/*# sourceMappingURL=app.css.map */

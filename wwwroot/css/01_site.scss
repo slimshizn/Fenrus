@@ -1,28 +1,37 @@
-﻿html {
-    font-size: 14px;
-    font-family:sans-serif;
-    position: relative;
-    min-height: 100%;
+﻿.fenrus-table-row > .name > i {
+  margin-right:0.25rem;
+  color:var(--accent);
 }
 
+
 @font-face {
-  font-family: "Source Sans Pro";
-  src: url("/fonts/SourceSansPro-Regular.woff") format("woff");
+    //font-family: "Source Sans Pro";
+    //src: url("/fonts/SourceSansPro-Regular.woff") format("woff");
+    font-family: "Montserrat";
+    src: url("/fonts/Montserrat-VariableFont_wght.ttf") format("truetype-variations");
+}
+html {
+    position: relative;
+    min-height: 100%;
+    // font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"
+    font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    --site-font-size:13px;
+    font-size:var(--site-font-size);
+    font-weight: 400;
 }
 body {
     /* variables */
-    --color-rgb: 240,240,240;
+    --color-rgb: 240, 240, 240;
     --color: rgb(var(--color-rgb));
     --color-darkest: rgb(160, 160, 160);
-    --color-secondary-rgb: 170,170,170;
+    --color-secondary-rgb: 170, 170, 170;
     --color-secondary: rgb(var(--color-secondary-rgb));
     --input-background-rgb: 49, 49, 49;
     --input-background: rgb(var(--input-background-rgb));
-    --input-border: rgba(50,50,50);
     --input-color: white;
-    --error-rgb: 255,0,0;
+    --error-rgb: 255, 100, 100;
     --error: rgb(var(--error-rgb));
-    
+
     --base: rgb(17, 18, 20);
     --base-rgb: 7, 18, 20;
     --base-darker: rgb(6, 17, 19);
@@ -30,15 +39,17 @@ body {
 
     --border-color: rgba(var(--color-rgb), 0.3);
     --input-border: var(---border-color);
-    --button-color:var(--color);
-    --button-background:transparent;
+    --button-color: var(--color);
+    --button-background: transparent;
 
     --success: #28a745;
+    --success-rgb: 0, 167, 69;
     --info: #17a2b8;
+    --info-rgb: 23, 162, 184;
     --warning: #ffc107;
+    --warning-rgb: 255, 193, 7;
     --danger: #dc3545;
-
-    font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"
+    --danger-rgb: 220, 53, 69;
 }
 
 body {
@@ -56,6 +67,22 @@ body {
     background-position: center;
 }
 
+#components-reconnect-modal
+{
+    background: rgba(0,0,0,0.65) !important;
+    color:var(--color) !important;
+    > div {
+        top: calc(50% - 50px) !important;
+        position:absolute !important;
+    }
+}
+a {
+  color:var(--accent);
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+}
 .main-content {
     flex-grow:1;
     justify-content: center;
@@ -88,7 +115,7 @@ body {
 }
 
 option {
-    /* need so our styles dont make these imposssible to read */
+    /* need so our styles dont make these impossible to read */
     color: white;
     background: #222;
 }
@@ -121,7 +148,6 @@ option {
     cursor:pointer;
 }
 
-
 .hide-group-titles .db-group > .title {
     display:none;
 }
@@ -129,7 +155,10 @@ option {
 .search {    
     text-align: center;
     margin:1rem;
+    z-index:2;
+    height:3rem;
     .search-inner {
+        z-index:2;
         border:solid 1px rgba(255,255,255,.15);
         height:3rem;
         display:flex;
@@ -166,6 +195,8 @@ option {
             padding:0 1rem;
             background:rgba(0,0,0,.8);
             color:var(--color);            
+            flex-grow:1;
+            max-width:9rem;
             &:hover {
                 background:var(--accent);
                 color:var(--color);
@@ -187,15 +218,6 @@ option {
     object-fit: scale-down;
     width: 100%;
     height: 100%;
-}
-
-#dashboard-name {
-    position: fixed;
-    top: 1rem;
-    left: 2rem;
-    font-size: 1.5rem;
-    text-transform: uppercase;
-    z-index:100;
 }
 #launching-app {
     display:none;
@@ -312,7 +334,8 @@ body.not-home {
             {                
                 font-size: 4rem;
                 text-align: center;
-                color:var(--error);
+                color:var(--error);                
+                width: 100%;
             }
             .title {
                 font-size:0.9rem;
@@ -376,7 +399,6 @@ body.not-home {
         overflow:auto;
         flex-grow:1;
     }
-
     
     h2 {
         margin: 0;
@@ -434,7 +456,8 @@ body.not-home {
 
 .db-group > .title {
     .group-controls{
-        display:none;
+        display:inline-block;
+        visibility: hidden;
         span {
             cursor:pointer;
             color:rgba(var(--color-rgb), 0.5);
@@ -445,7 +468,7 @@ body.not-home {
     }
     &:hover {
         .group-controls{
-            display:unset;
+            visibility: unset;
         }
     }
 }
@@ -461,14 +484,11 @@ body.terminal .main-content {
 }
 
 .terminal {
-    .close 
-    {        
+    .terminal-btn  {
         width: 4rem;
         height: 2rem;
         position: fixed;
-        background: red;
         z-index: 10;
-        right: 3rem;
         top: 4rem;
         opacity:0.3;
         &:hover {
@@ -476,22 +496,49 @@ body.terminal .main-content {
             cursor:pointer;
         }
         &::after {            
-            display: inline-block;
-            content: "\00d7";             
-            font-size: 2rem;
+            display: inline-block;       
+            font-size: 1.5rem;
             position: relative;
             left: 0;
             right: 0;
             text-align: center;
             width: 4rem;
-            top: -3px;
+            top: 4px;
+            font-family: "Font Awesome 5 Free"; 
+            font-weight: 900; 
+        }
+    }
+    .close
+    {        
+        background: red;
+        right: 3rem;
+        &::after {
+            content: "\f00d";      
+        }
+    }
+    
+    .pause{
+        right: calc(7rem + 3px);
+        &:not(.paused)
+        {        
+            background: blue;
+            &::after {
+                content: "\f04c";      
+            }
+        }
+        &.paused
+        {        
+            background: green;
+            &::after {
+                content: "\f04b";      
+            }
         }
     }
 }
 
 
 table {
-    border: solid 1px var(--input-background);
+    border: none;
     padding:0;
     margin:0;
     width:100%;
@@ -570,7 +617,7 @@ table {
         white-space: pre-line;
     }
     .date {
-        width:4.5rem;
+        width:7.5rem;
     }
     th {
         background:#131B1C;
@@ -610,63 +657,28 @@ table {
 }
 
 
-.blocker {
-    background:rgba(var(--base-rgb),0.9);
-    z-index:1000;
-    position: absolute;
-    top: 0;
-    right: 0;
-    left: 0;
-    bottom: 0;
-    display: none;
-    &.visible {
-        display:flex;
-    }
-
-    .blocker-indicator {
-        margin:auto;
-    }
-    .blocker-spinner {
-        margin:auto;
-        --border-width: 16px;
-  
-        height: 100px;
-        width: 100px;
-        border-radius: 50%;
-        
-        /* 0.5px's are needed to avoid hard-stopping */
-        --mask: radial-gradient(
-          farthest-side, 
-          transparent calc(100% - var(--border-width) - 0.5px), 
-          #000 calc(100% - var(--border-width) + 0.5px)
-        );
-        -webkit-mask: var(--mask);
-                mask: var(--mask);
-                
-        /* we're using two half linear-gradient which is masked by the radial-gradient */
-        background: linear-gradient(to top, rgba(var(--accent-rgb), 1), rgba(var(--accent-rgb), 0.5)) 100% 0/50% 100% no-repeat,
-                    linear-gradient(rgba(var(--accent-rgb), 0.5) 50%, transparent 95%) 0 0/50% 100% no-repeat;
-        animation: blocker-spin 1s linear infinite;
-
-    }
-    .blocker-message {
-        color:var(--accent);
-        border:solid 1px var(--accent);
-        margin-top:2rem;
-        padding:0.5rem 2rem;
-        font-size:0.9rem;
-        text-align: center;
-        &.hidden {
-            display:none;
-        }
-    }
+a[class*="fa-"] {
+    color:var(--color);
+    text-decoration: none !important;
 }
 
-@keyframes blocker-spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+.blazored-toast-container {
+    z-index:10000 !important;
+    .blazored-toast-message {
+        white-space:pre-wrap;
+    }
+}
+.blazored-toast-header h5 {
+    margin:0;
+}
+
+/* Change the white to any color */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active{
+    -webkit-box-shadow: 0 0 0 30px var(--input-background) inset !important;
+}
+input:-webkit-autofill{
+    -webkit-text-fill-color: var(--color) !important;
 }

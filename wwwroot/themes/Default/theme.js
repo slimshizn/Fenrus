@@ -11,13 +11,8 @@ class DefaultTheme
             this.oneRem = parseFloat(getComputedStyle(document.documentElement).fontSize);
             this.oneUnit = this.oneRem * this.unit;
 
-            for(let i=3;i>=1;i--){
-                let div = document.createElement('div')
-                div.classList.add('bg');
-                div.classList.add('bg' + i);
-                document.body.insertAdjacentElement("afterbegin", div);
-            }
-
+            document.addEventListener('fenrus-item-resized', (e) => this.onItemResized(e));
+            document.addEventListener('fenrus-item-deleted', (e) => this.onItemDeleted(e));
 
             let json = document.getElementById('theme-settings').value;          
             this.settings = json ? JSON.parse(json) : {};
@@ -42,6 +37,25 @@ class DefaultTheme
         }
     }
 
+    onItemResized(event) {
+        if(!event?.detail?.element)
+            return;
+
+        let group = event.detail.element.closest('.db-group');
+        if(group)
+            this.shrinkGroup(group);
+    }
+    
+    onItemDeleted(event) {
+        console.log('recieved item deleted custom event!');
+        if(!event?.detail?.group)
+            return;
+
+        let group = event.detail.group;
+        if(group)
+            this.shrinkGroup(group);
+    }
+
     load() 
     {        
         if(typeof(GrowingPacker) === 'undefined' || !this.settings)
@@ -51,21 +65,15 @@ class DefaultTheme
         if(!eleDashboard)
             return;            
         let className = eleDashboard.className || '';
-        console.log(eleDashboard.className );
 
         if(className.indexOf('dashboard') < 0)
             className += ' dashboard';
         className = className.replace(/(bottom|left|top|right|vertical|horizontal|center)/g, ' ');
-        className += ' ' + this.settings.Placement;
+        className += ' ' + (this.settings.Placement || 'center'); 
         className += this.settings.Horizontal ? ' horizontal' : ' vertical';
         className = className.replace(/  +/g, ' ');
         eleDashboard.className = className;
-    
-        let animateBackground = this.settings.AnimatedBackground !== false;
-        document.body.classList.remove('animate-background');
-        document.body.classList.remove('no-animate-background');
-        document.body.classList.add((animateBackground ? '' : 'no-') + 'animate-background');        
-
+        
         this.shrinkGroups();            
 
         document.body.classList.remove('horizontal');
@@ -90,8 +98,8 @@ class DefaultTheme
         let classes = [];
         let bodyClasses = [];
         classes.push(args?.Placement || 'bottom-left');
-        let animateBackground = args?.AnimatedBackground !== false;
-        bodyClasses.push((animateBackground ? '' : 'no-') + 'animate-background');
+        // let animateBackground = args?.AnimatedBackground !== false;
+        // bodyClasses.push((animateBackground ? '' : 'no-') + 'animate-background');
         
         if(args?.Horizontal){
             classes.push('horizontal');
@@ -162,6 +170,11 @@ class DefaultTheme
             {
                 w = 6;
                 h = 2;
+            }
+            else if(item.classList.contains("larger"))
+            {
+                w = 6;
+                h = 4;
             }
             else if(item.classList.contains("x-large"))
             {

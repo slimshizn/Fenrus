@@ -8,16 +8,20 @@ class SmartApp
     controller;
     timerCarousel;
     icon;
+    ele;
+    carouselCanUpdate = true;
+    carouselWaitingUpdate = null;
+    dashboardUid;
 
     constructor(args)
     {
         this.uid = args.uid || args.instanceUid;
         this.name = args.name;
         this.interval = args.interval;
+        this.ele = document.getElementById(this.uid)
         this.icon = document.getElementById(this.uid).querySelector('.icon img')?.getAttribute('src');
-        if(this.interval === 0)
-            this.interval = 3000;
         this.dashboardIntanceUid = this.getDashboardInstanceUid();
+        this.dashboardUid = document.querySelector('.dashboard').getAttribute('x-uid');
         document.addEventListener('disposeDashboard', (e) => this.dispose(), false);
         this.trigger();
     }
@@ -26,15 +30,17 @@ class SmartApp
         if(this.stillActive() === false)
             return;
         
-        let result = await this.doWork();
-        
-        if(this.stillActive() === false)
-            return;
+        let historyOpen = !!document.getElementById('update-history-data-wrapper');
+        if(historyOpen === false) 
+        {
+            let result = await this.doWork();
 
-        if(!result)
-            return; // nothing more to do
-        if(this.interval <= 0)
-            return; // nothing more to do
+            if (this.stillActive() === false)
+                return;
+
+            if (this.interval <= 0)
+                return; // nothing more to do
+        }
         
         setTimeout(()=> this.trigger(), this.interval);
     }
@@ -46,7 +52,6 @@ class SmartApp
 
     dispose()
     {
-        console.log('disposing of smart app!', this.name);
         if(this.timerCarousel)
             clearInterval(this.timerCarousel);
         this.controller?.abort();
@@ -54,18 +59,27 @@ class SmartApp
 
     stillActive(){
         let dashboard = this.getDashboardInstanceUid();
-        if(dashboard != this.dashboardIntanceUid){
-            console.log('No longer active: ' + this.name);
+        if(dashboard != this.dashboardIntanceUid)
             return false;
-        }
         return true;
+    }
+    
+    getTimeString(){
+        let dt = new Date();
+        return String(dt.getHours()).padStart(2, '0') + ':' +
+               String(dt.getMinutes()).padStart(2, '0') + ':' +
+               String(dt.getSeconds()).padStart(2, '0') + '.' +
+               String(dt.getMilliseconds()).padStart(4, '0');
     }
 
     async doWork() 
     {
         if(!this.stillActive())
-            return false;        
-        if(++this.renderCount < 2)
+            return false;
+        let dt = new Date();
+        
+        let firstRender = ++this.renderCount < 2;
+        if(firstRender)
         {
             let saved = this.getFromLocalStorage();
             if(saved) 
@@ -83,8 +97,12 @@ class SmartApp
             return true; // prevent request if the page doesnt have focus
         }    
 
+        if(this.hasFocus())
+            return true; // prevent a refresh if cursor is over the dashboard item        
+
         return await this.refresh();
     }
+
     refresh()
     {        
         return new Promise((resolve, reject) =>
@@ -92,10 +110,10 @@ class SmartApp
             this.controller?.abort();
 
             this.controller = new AbortController();
-            let timeoutId = setTimeout(() => this.controller.abort(), Math.min(Math.max(this.interval, 3000), 5000));
+            let timeoutId = setTimeout(() => this.controller?.abort(), Math.min(Math.max(this.interval, 3000), 5000));
 
             let success = true;
-            let url = `/apps/${encodeURIComponent(this.name)}/${encodeURIComponent(this.uid)}/status?name=` + encodeURIComponent(this.name) + '&t=' + new Date().getTime();
+            let url = `/apps/dashboard/${this.dashboardUid}/${encodeURIComponent(this.name)}/${encodeURIComponent(this.uid)}/status?name=` + encodeURIComponent(this.name) + '&size=' + encodeURIComponent(this.getItemSize()) + '&t=' + new Date().getTime();
             fetch(url, {
                 signal: this.controller.signal
             })
@@ -128,18 +146,13 @@ class SmartApp
                 return res.text();
             })
             .then(html => {
-                if(html != undefined)
+                if(html !== undefined)
                     this.appSetStatus(html);  
             }).catch(error => {
                 success = false;
                 if(timeoutId)
                     clearTimeout(timeoutId);
-                this.controller = null;
-
-                let currentDashboard = this.getDashboardInstanceUid();
-                if(currentDashboard != this.dashboardInstanceUid)
-                    return; // if they changed dashboards
-                console.log(name + ' error: ', error);    
+                this.controller = null; 
             }).finally(() => { 
                 resolve(success);
             });
@@ -168,13 +181,25 @@ class SmartApp
         }
     }
 
+    hasFocus() {
+        if(!this.ele)
+            return false;
+        if(this.ele.matches(':hover'))
+            return true;
+        return false;
+    }
+
     getItemSize()
     {
-        let ele = document.getElementById(this.uid);
+        let ele = this.ele;
         if(!ele)
             return '';
+        if(ele.classList.contains('xx-large'))
+            return 'xx-large'
         if(ele.classList.contains('x-large'))
             return 'x-large'
+        if(ele.classList.contains('larger'))
+            return 'larger'
         if(ele.classList.contains('large'))
             return 'large'
         if(ele.classList.contains('medium'))
@@ -191,7 +216,7 @@ class SmartApp
             let item = JSON.parse(localStorage.getItem(this.uid + '-' + size));
             if(!item?.date)
                 return;
-            if(item.date < (new Date().getTime() - 60000))
+            if(item.date < (new Date().getTime() - 5000))
                 return { html: item.html, old: true}; // older than a minute reject it
             return { html: item.html, old: false};
         }
@@ -209,52 +234,86 @@ class SmartApp
 
     appSetStatus(content)
     {
+        if(!content)
+            return;
+        this.ele.classList.remove('update-error');
+        if(/^ERR:/.test(content))
+        {
+            console.log('error content: ' + content.substring(4));
+            this.ele.classList.add('update-error');
+            return;
+        }
         let eleItem = document.getElementById(this.uid);
         if(!eleItem)
             return;
+        this.setInLocalStorage(content);        
+        if(/^:carousel:/.test(content)){
+            if(this.carouselCanUpdate)
+                this.initialCarouselContent(content);
+            else
+                this.carouselWaitingUpdate = content;
+            return;
+        }
 
         let ele = eleItem.querySelector('.status');
-        if (ele && content) {
-            this.setInLocalStorage(content);        
-            if(/^:carousel:/.test(content)){
-                content = content.substring(10);
-                let index = content.indexOf(':');
-                let carouselId = content.substring(0, index);
-                content = content.substring(index + 1);
-                if(!this.timerCarousel)
-                    this.carouselTimer(carouselId);
-                this.setItemClass(eleItem, 'carousel');
-                ele.innerHTML = content;
-                let indexes = ele.querySelectorAll('.controls a');
-                for(let i=0;i<indexes.length;i++)
-                {
-                    indexes[i].addEventListener('click', (event) => {
-                        event.stopImmediatePropagation();
-                        event.preventDefault();
-                        this.carouselItem(event, carouselId, i);
-                    }, false);
-                }
-                return;
-            }    
-            else if(/^:bar-info:/.test(content)){
-                content = content.substring(10);
-                this.setItemClass(eleItem, 'bar-info');
-            }
-            else if(/^data:/.test(content)){
-                content = `<img class="app-chart" src="${content}" />`;
-                this.setItemClass(eleItem, 'chart');
-            }
-            else {
-                this.setItemClass(eleItem, 'db-basic');
-            }
+        if(!ele)
+            return;
+        if(/^:bar-info:/.test(content)){
+            content = content.substring(10);
+            this.setItemClass(eleItem, 'bar-info');
+        }
+        else if(/^data:/.test(content)){
+            content = `<img class="app-chart" src="${content}" />`;
+            this.setItemClass(eleItem, 'chart');
+        }
+        else if(/^chart:/.test(content))
+        {
+            content = content.substring(7);
+            let colonIndex = content.indexOf(':')
+            let chart = content.substring(0, colonIndex);
+            content = content.substring(colonIndex + 1)
+            this.renderChart(chart, JSON.parse(content), ele);
+            return;
+        }
+        else if(content.indexOf('livestats') > 0){
+            this.setItemClass(eleItem, 'db-basic live-stats');
+        }
+        else {
+            this.setItemClass(eleItem, 'db-basic');
+        }
+        if (content !== 'undefined') {
             ele.innerHTML = content;
-
-
         }
     }
 
+    initialCarouselContent(content){
+        content = content.substring(10);
+        let index = content.indexOf(':');
+        let carouselId = content.substring(0, index);
+        content = content.substring(index + 1);
+        if(this.timerCarousel){
+            clearInterval(this.timerCarousel);
+            this.timerCarousel = null;
+        }
+        this.carouselTimer(carouselId);
+        this.setItemClass(this.ele, 'carousel');
+        this.ele.innerHTML = content;
+        let eleControls = this.ele.querySelector('.controls');
+        let indexes = this.ele.querySelectorAll('.controls a');
+        eleControls.className = 'controls items-' + indexes.length;
+        for(let i=0;i<indexes.length;i++)
+        {
+            indexes[i].addEventListener('click', (event) => {
+                event.stopImmediatePropagation();
+                event.preventDefault();
+                this.carouselItem(event, carouselId, i);
+            }, false);
+        }
+
+    }
+
     setItemClass(item, className) {
-        item.className = item.className.replace(/(carousel|chart|db-basic)/g, '') + ' ' + className;
+        item.className = (item.className.replace(/(carousel|chart|db-basic|bar-info|live-stats)/g, '') + ' ' + className).replace(/\s\s+/g, ' ');
     }
 
     carouselItem(e, id, itemIndex){
@@ -292,6 +351,7 @@ class SmartApp
     carouselTimer(id) {
         if(this.timerCarousel)
             clearInterval(this.timerCarousel);
+        let self = this;
         this.timerCarousel = setInterval(() => {
             let carousel = document.getElementById(id);
             if(!carousel)
@@ -303,9 +363,93 @@ class SmartApp
             
             let visible = carousel.querySelector('.item.visible');
             let index = parseInt(visible.id.substring(visible.id.indexOf('-') + 1), 10);
-            ++index;
+            ++index;            
             let hasNext = document.getElementById(id + '-' + index);
-            this.carouselItem(null, id, hasNext ? index : 0);
+            index = hasNext ? index : 0;
+            this.carouselCanUpdate = index === 0;
+            if(index === 0 && this.carouselWaitingUpdate)
+            {
+                this.initialCarouselContent(this.carouselWaitingUpdate);
+                this.carouselWaitingUpdate = null;
+            }
+            else
+            {
+                this.carouselItem(null, id, index);
+            }
         }, 5000);
+    }
+    
+    renderChart(type, args, ele){
+        let title = args.title;
+        let labels = args.labels;
+        let datasets = args.data;
+        let min = args.min;
+        let max = args.max;
+        var data = {
+            labels: labels,
+            datasets: datasets.map((x, index) => {
+                return {
+                    data: x,
+                    fill: false,
+                    borderColor: ['green', 'blue', 'yellow', 'red', 'purple', 'orange', 'cornflowerblue'][index],
+                    lineTension: 0.1
+                };
+            })
+        };
+        //options
+        var options = {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: false,
+            plugins: {
+                title: {
+                    display:true,
+                    color:'white',
+                    align:'end',
+                    position:'top',
+                    text: title.indexOf('\n') > 0 ? title : ('   ' + title + '   '),
+                },
+                legend: {
+                    display:false
+                }
+            },
+            elements: {
+                point: {
+                    radius:0
+                }
+            },
+            scales: {
+                yAxes: {
+                    grid: {
+                        display: false,
+                        drawBorder: false
+                    },
+                    min: min == -1 ? null : min || 0,
+                    max: max == -1 ? null : max || 100,
+                    display: false,
+                    ticks: {
+                        display:false
+                    }
+                },
+                xAxes: {
+                    grid: {
+                        display: true
+                    },
+                    ticks: {
+                        display:false
+                    }
+                }
+            }
+        };
+        ele.innerHTML = '<canvas></canvas>';
+        let canvas = ele.querySelector('canvas');
+        let eleDbItem = ele.parentNode.parentNode.parentNode;
+        if(eleDbItem.classList.contains('chart') === false)
+            eleDbItem.classList.add('chart');               
+        new Chart(canvas, {
+            type: 'line',
+            data: data,
+            options: options
+        });
     }
 }

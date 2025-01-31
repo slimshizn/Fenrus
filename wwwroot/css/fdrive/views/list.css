@@ -1,0 +1,69 @@
+#fdrive-list.list .file .file-inner {
+  background: rgba(var(--color-rgb), 0.01);
+}
+#fdrive-list.list .file:nth-of-type(even) .file-inner {
+  background: rgba(var(--color-rgb), 0.03);
+}
+#fdrive-list.list .file:nth-of-type(even):hover .file-inner {
+  background: rgba(var(--color-rgb), 0.2);
+}
+#fdrive-list.list .file-inner {
+  --margin: 2px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  margin: var(--margin);
+  height: calc(100% - var(--margin) * 2);
+  width: calc(100% - var(--margin) * 4);
+  border-radius: 5px;
+  position: relative;
+}
+#fdrive-list.list .file-inner:hover {
+  background: rgba(var(--color-rgb), 0.2);
+}
+#fdrive-list.list .file-inner .icon {
+  width: 1.5rem;
+  min-width: 1.5rem;
+  height: 100%;
+  margin: 0 0.5rem;
+  font-size: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#fdrive-list.list .file-inner .icon img {
+  width: 100%;
+  height: 65%;
+  object-fit: cover;
+}
+#fdrive-list.list .file-inner .name {
+  flex-grow: 1;
+  white-space: nowrap;
+  align-items: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: calc(100% - 11rem);
+}
+#fdrive-list.list .file-inner > span {
+  margin: auto;
+}
+#fdrive-list.list .file-inner .size {
+  width: 10rem;
+  min-width: 10rem;
+  justify-content: right;
+  text-align: right;
+}
+#fdrive-list.list .file-inner .modified {
+  width: 7rem;
+  min-width: 7rem;
+  text-align: center;
+}
+
+#fdrive-wrapper.small #fdrive-list.list .size {
+  padding-right: 1rem;
+}
+#fdrive-wrapper.small #fdrive-list.list .modified {
+  display: none;
+}
+
+/*# sourceMappingURL=list.css.map */

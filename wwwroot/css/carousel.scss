@@ -20,6 +20,9 @@
         width:calc(100% - 8rem);
         text-align: center;
         z-index: 5;
+        &.items-0, &.items-1 {
+            display:none;
+        }
         a {
             display: inline-block;
             background-color: var(--color);
@@ -83,6 +86,12 @@
     .inner > .icon {
         display:none;
     }
+    .fill {
+        background:#222;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
     .app-icon {
         position:absolute;
         top:.25rem;
@@ -114,7 +123,9 @@
         max-width:70%;
         overflow: hidden;
         text-overflow: ellipsis;
-        white-space: nowrap;
+        &:not(.wrap){
+            white-space: nowrap;
+        }
     }
     .br {
         bottom:0;

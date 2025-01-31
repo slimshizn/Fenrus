@@ -1,0 +1,203 @@
+body {
+  --fc-button-bg-color: var(--base);
+  --fc-button-border-color: rgba(var(--accent-rgb), 0.7);
+  --fc-button-text-color: var(--color);
+
+  --fc-button-hover-bg-color: var(--base);
+  --fc-button-hover-border-color: var(--accent);
+
+  --fc-button-active-bg-color: var(--base);
+  --fc-button-active-border-color: var(--accent);
+  
+  --fc-non-business-color: rgba(var(--color-rgb), 0.05);
+  --fc-border-color: var(--border-color);
+
+  --fc-event-bg-color: rgba(var(--accent-rgb), 0.3);
+  --fc-event-border-color: var(--accent);
+  --fc-today-bg-color: rgba(var(--accent-rgb), 0.3);
+  --fc-small-font-size: 1rem;
+  --fc-neutral-bg-color: var(--base);
+  --fc-list-event-hover-bg-color:rgba(var(--accent-rgb), 0.3);
+  --fc-highlight-color: rgba(var(--accent-rgb), 0.2);
+}
+
+#fdrive-wrapper {
+  &.small {
+    #calendar-actual {
+      padding-top: 0.5rem !important;
+    }
+    .fc-header-toolbar {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      grid-template-columns: 1fr 1fr;
+      gap:0.5rem;
+      > div {
+        text-align: right;        
+      }
+      > div:nth-child(2n)
+      {
+        grid-row: 1;
+        grid-column: 1 / span 2;
+      }
+      > div:first-child {
+        grid-row: 2;
+        grid-column: 1;
+        text-align:left;
+      }
+      > div:last-child {
+          grid-row: 2;
+          grid-column: 2;
+      }
+    }
+    .fc-toolbar-title {
+      font-size:1.4rem;
+    }
+  }
+}
+
+
+#fdrive-calendar, #fdrive-email, #fdrive-apps {
+  .fdrive-pane-title {
+    background: #000;
+    text-align: center;
+
+    > span {
+      line-height: 3rem;
+      text-transform: uppercase;
+      font-weight: 600;
+      font-size: 1.2rem;
+      letter-spacing: 0.3rem;
+    }
+
+    .title {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      max-width: 70%;
+      width: 70%;
+      white-space: nowrap;
+      direction: rtl;
+      display: inline-block;
+    }
+  }
+}
+
+#fdrive-calendar {
+  #calendar-actual {
+    padding:1rem 2rem 7rem;
+    > .fc-view-harness {
+      background: var(--base);
+    }
+    .fc-timegrid-event-harness {
+      line-height: 1.1rem !important;
+    }
+    table tr > :first-child:not(.fc-list-event-time) {
+      padding-left: unset !important;
+    }
+  }
+  .fc-daygrid-day-events {
+    position: absolute;
+    width: 100%;
+    .fc-daygrid-event-dot {
+      display:none;
+    }
+    .fc-daygrid-event-harness a {
+      display:flex;
+      flex-direction: row;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      background: rgba(var(--accent-rgb), 0.1);
+      padding: 0.5rem 0.25rem;
+      b {
+        margin-right:0.5rem;
+      }
+    }
+  }
+  .fc .fc-daygrid-day-frame {
+    overflow:hidden;    
+  }
+  .fc-timeGridWeek-view {
+    .fc-event-main {
+      b {
+        display:block;
+      }
+    }
+    tbody > tr:first-child td {
+      .fc-daygrid-day-frame {
+        height:fit-content;
+        overflow:unset;
+        .fc-daygrid-day-events {
+          position: unset;
+          a {
+            white-space: normal;
+          }
+        }
+      }
+    }
+  }
+  td.fc-day {
+    line-height:1.1rem;
+  }
+  .fc-event {
+    overflow:hidden;
+  }
+}
+
+#fdrive-calendar-popover {
+  background: rgba(var(--base-rgb), 0.9);
+  border: solid 1px var(--accent);
+  padding: 0.5rem;
+  z-index:1000;
+  position:relative;
+  .pointer {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 1rem 0 1rem 1rem;
+    border-color: transparent transparent transparent var(--accent);
+    transform: translateX(-100%) translateY(-50%) rotate(180deg);
+    position: absolute;
+    left:0;
+    top:50%;
+  }
+  .title {
+    display:flex;
+    flex-direction: column;    
+    .name {
+      font-size:1.2rem;
+      font-weight:600;
+      max-height:5rem;
+      text-overflow:ellipsis;
+      overflow: hidden;
+    }
+    .day {
+      color:var(--accent);
+    }
+  }
+  .controls {
+    position:absolute;
+    top:0.5rem;
+    right:0.5rem;
+    display:flex;
+    flex-direction: column-reverse;
+    i {
+      opacity:0.5;
+      margin:0.5rem 0;
+      cursor:pointer;
+      font-size:1.2rem;
+      width:2rem;
+      text-align: center;
+      &:hover {
+        opacity:1;
+      }
+    }
+  }
+}
+.fc-daygrid-day-number {
+  color:rgba(var(--color-rgb), 0.8);
+}
+.fc-day-today {
+  .fc-daygrid-day-number {
+    color:var(--color);
+    font-weight:600;
+  }
+}

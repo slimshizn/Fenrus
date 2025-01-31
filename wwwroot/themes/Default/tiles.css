@@ -6,7 +6,7 @@
   display: block;
   background: rgba(0, 0, 0, 0.5);
   position: relative;
-  text-decoration: none;
+  text-decoration: none !important;
   color: rgba(255, 255, 255, 0.8);
   margin: 0;
   padding: 0.5rem;
@@ -61,10 +61,10 @@
   grid-row-end: span 2;
 }
 .db-item.large {
-  grid-column-end: span 6;
-  grid-row-end: span 2;
   width: 21.5rem;
   height: 6.5rem;
+  grid-column-end: span 6;
+  grid-row-end: span 2;
 }
 .db-item.large .inner {
   display: flex;
@@ -123,6 +123,29 @@
 }
 .db-item.large .status .livestats li a {
   color: var(--color);
+}
+.db-item.larger {
+  width: 21.5rem;
+  height: 6.5rem;
+  grid-row-end: span 4;
+  height: 14rem;
+}
+.db-item.larger .icon {
+  width: 100%;
+  height: 100%;
+}
+.db-item.larger .icon > img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.db-item.larger .inner {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.db-item.larger .content > .title {
+  display: none;
 }
 .db-item.x-large {
   grid-column-end: span 4;
@@ -226,7 +249,7 @@
   transform: rotateY(180deg);
 }
 
-.dashboard .db-item.db-basic.medium:hover .icon::after, .dashboard .db-item.db-basic.x-large:hover .icon::after, .dashboard .db-item.db-basic.xx-large:hover .icon::after, .side .db-item.db-basic.medium:hover .icon::after, .side .db-item.db-basic.x-large:hover .icon::after, .side .db-item.db-basic.xx-large:hover .icon::after {
+.dashboard .db-item.db-basic.medium:hover .icon::after, .dashboard .db-item.db-basic.x-large:hover .icon::after, .dashboard .db-item.db-basic.xx-large:hover .icon::after, .side .db-item.db-basic.medium:hover .icon::after, .side .db-item.db-basic.x-large:hover .icon::after, .side .db-item.db-basic.xx-large:hover .icon::after, .preview .db-item.db-basic.medium:hover .icon::after, .preview .db-item.db-basic.x-large:hover .icon::after, .preview .db-item.db-basic.xx-large:hover .icon::after {
   content: "";
   position: absolute;
   top: 0;
@@ -235,29 +258,103 @@
   bottom: 0;
   background: rgba(0, 0, 0, 0.7);
 }
-.dashboard .db-item.db-basic.medium:hover .content, .dashboard .db-item.db-basic.x-large:hover .content, .dashboard .db-item.db-basic.xx-large:hover .content, .side .db-item.db-basic.medium:hover .content, .side .db-item.db-basic.x-large:hover .content, .side .db-item.db-basic.xx-large:hover .content {
-  display: unset;
+.dashboard .db-item.db-basic.medium:hover .icon, .dashboard .db-item.db-basic.medium:hover .content, .dashboard .db-item.db-basic.x-large:hover .icon, .dashboard .db-item.db-basic.x-large:hover .content, .dashboard .db-item.db-basic.xx-large:hover .icon, .dashboard .db-item.db-basic.xx-large:hover .content, .side .db-item.db-basic.medium:hover .icon, .side .db-item.db-basic.medium:hover .content, .side .db-item.db-basic.x-large:hover .icon, .side .db-item.db-basic.x-large:hover .content, .side .db-item.db-basic.xx-large:hover .icon, .side .db-item.db-basic.xx-large:hover .content, .preview .db-item.db-basic.medium:hover .icon, .preview .db-item.db-basic.medium:hover .content, .preview .db-item.db-basic.x-large:hover .icon, .preview .db-item.db-basic.x-large:hover .content, .preview .db-item.db-basic.xx-large:hover .icon, .preview .db-item.db-basic.xx-large:hover .content {
+  backface-visibility: unset;
 }
-.dashboard .db-item.db-basic.medium:hover .inner, .dashboard .db-item.db-basic.x-large:hover .inner, .dashboard .db-item.db-basic.xx-large:hover .inner, .side .db-item.db-basic.medium:hover .inner, .side .db-item.db-basic.x-large:hover .inner, .side .db-item.db-basic.xx-large:hover .inner {
-  transform: rotateY(180deg);
-  top: -0.5rem;
-  right: -0.5rem;
+.dashboard .db-item.db-basic.medium:hover .icon img, .dashboard .db-item.db-basic.x-large:hover .icon img, .dashboard .db-item.db-basic.xx-large:hover .icon img, .side .db-item.db-basic.medium:hover .icon img, .side .db-item.db-basic.x-large:hover .icon img, .side .db-item.db-basic.xx-large:hover .icon img, .preview .db-item.db-basic.medium:hover .icon img, .preview .db-item.db-basic.x-large:hover .icon img, .preview .db-item.db-basic.xx-large:hover .icon img {
+  display: none;
+}
+.dashboard .db-item.db-basic.medium:hover .content, .dashboard .db-item.db-basic.x-large:hover .content, .dashboard .db-item.db-basic.xx-large:hover .content, .side .db-item.db-basic.medium:hover .content, .side .db-item.db-basic.x-large:hover .content, .side .db-item.db-basic.xx-large:hover .content, .preview .db-item.db-basic.medium:hover .content, .preview .db-item.db-basic.x-large:hover .content, .preview .db-item.db-basic.xx-large:hover .content {
+  display: unset;
+  margin-left: 0.15rem !important;
+  margin-top: -0.4rem;
+}
+.dashboard .db-item.db-basic.medium:hover .content > div, .dashboard .db-item.db-basic.x-large:hover .content > div, .dashboard .db-item.db-basic.xx-large:hover .content > div, .side .db-item.db-basic.medium:hover .content > div, .side .db-item.db-basic.x-large:hover .content > div, .side .db-item.db-basic.xx-large:hover .content > div, .preview .db-item.db-basic.medium:hover .content > div, .preview .db-item.db-basic.x-large:hover .content > div, .preview .db-item.db-basic.xx-large:hover .content > div {
+  padding: 0 0.35rem;
+}
+.dashboard .db-item.db-basic.medium:hover .content > div:first-child, .dashboard .db-item.db-basic.x-large:hover .content > div:first-child, .dashboard .db-item.db-basic.xx-large:hover .content > div:first-child, .side .db-item.db-basic.medium:hover .content > div:first-child, .side .db-item.db-basic.x-large:hover .content > div:first-child, .side .db-item.db-basic.xx-large:hover .content > div:first-child, .preview .db-item.db-basic.medium:hover .content > div:first-child, .preview .db-item.db-basic.x-large:hover .content > div:first-child, .preview .db-item.db-basic.xx-large:hover .content > div:first-child {
+  padding-top: 0.25rem;
+}
+.dashboard .db-item.db-basic.medium:hover .inner, .dashboard .db-item.db-basic.x-large:hover .inner, .dashboard .db-item.db-basic.xx-large:hover .inner, .side .db-item.db-basic.medium:hover .inner, .side .db-item.db-basic.x-large:hover .inner, .side .db-item.db-basic.xx-large:hover .inner, .preview .db-item.db-basic.medium:hover .inner, .preview .db-item.db-basic.x-large:hover .inner, .preview .db-item.db-basic.xx-large:hover .inner {
+  transform: rotateY(180deg) scale(1.15);
 }
 
-.setting .db-item.medium .inner, .setting .db-item.medium .icon {
+@supports (-moz-appearance: none) {
+  .dashboard .db-item.db-basic.medium:hover .inner, .dashboard .db-item.db-basic.x-large:hover .inner, .dashboard .db-item.db-basic.xx-large:hover .inner, .side .db-item.db-basic.medium:hover .inner, .side .db-item.db-basic.x-large:hover .inner, .side .db-item.db-basic.xx-large:hover .inner {
+    width: 106px;
+    left: -8px;
+    top: -7px;
+    height: 106px;
+    max-width: unset;
+    max-height: unset;
+  }
+  .dashboard .db-item.db-basic.medium:hover .icon img, .dashboard .db-item.db-basic.x-large:hover .icon img, .dashboard .db-item.db-basic.xx-large:hover .icon img, .side .db-item.db-basic.medium:hover .icon img, .side .db-item.db-basic.x-large:hover .icon img, .side .db-item.db-basic.xx-large:hover .icon img {
+    display: none;
+  }
+  .dashboard .db-item.db-basic.medium:hover .title, .dashboard .db-item.db-basic.x-large:hover .title, .dashboard .db-item.db-basic.xx-large:hover .title, .side .db-item.db-basic.medium:hover .title, .side .db-item.db-basic.x-large:hover .title, .side .db-item.db-basic.xx-large:hover .title {
+    left: 14px;
+    position: relative;
+    top: 6px;
+  }
+  .dashboard .db-item.db-basic.medium:hover:not(.live-stats) .title, .dashboard .db-item.db-basic.x-large:hover:not(.live-stats) .title, .dashboard .db-item.db-basic.xx-large:hover:not(.live-stats) .title, .side .db-item.db-basic.medium:hover:not(.live-stats) .title, .side .db-item.db-basic.x-large:hover:not(.live-stats) .title, .side .db-item.db-basic.xx-large:hover:not(.live-stats) .title {
+    top: -7px;
+  }
+  .dashboard .db-item.db-basic.medium:hover .status, .dashboard .db-item.db-basic.x-large:hover .status, .dashboard .db-item.db-basic.xx-large:hover .status, .side .db-item.db-basic.medium:hover .status, .side .db-item.db-basic.x-large:hover .status, .side .db-item.db-basic.xx-large:hover .status {
+    position: relative;
+    top: 8px;
+    left: 14px;
+  }
+  .dashboard .db-item.db-basic.medium:hover .livestats, .dashboard .db-item.db-basic.x-large:hover .livestats, .dashboard .db-item.db-basic.xx-large:hover .livestats, .side .db-item.db-basic.medium:hover .livestats, .side .db-item.db-basic.x-large:hover .livestats, .side .db-item.db-basic.xx-large:hover .livestats {
+    position: relative;
+    left: -14px;
+    top: -4px;
+  }
+  .dashboard .db-item.db-basic.medium:hover .value, .dashboard .db-item.db-basic.x-large:hover .value, .dashboard .db-item.db-basic.xx-large:hover .value, .side .db-item.db-basic.medium:hover .value, .side .db-item.db-basic.x-large:hover .value, .side .db-item.db-basic.xx-large:hover .value {
+    position: relative;
+    left: 14px;
+    top: 4px;
+  }
+  .dashboard .db-item.db-basic.medium:hover .inner, .side .db-item.db-basic.medium:hover .inner {
+    width: 106px;
+    height: 106px;
+  }
+  .dashboard .db-item.db-basic.x-large:hover .inner, .side .db-item.db-basic.x-large:hover .inner {
+    width: 212px;
+    height: 212px;
+  }
+  .dashboard .db-item.db-basic.xx-large:hover .inner, .side .db-item.db-basic.xx-large:hover .inner {
+    width: 316px;
+    height: 316px;
+  }
+}
+.db-item.medium .inner, .db-item.medium .icon {
   max-height: 100%;
   max-width: 100%;
   overflow: hidden;
 }
-.setting .db-item.medium .content {
+.db-item.medium .content {
   display: none;
 }
-.setting .db-item.medium img {
+.db-item.medium img {
   object-fit: contain;
   max-height: 100%;
   max-width: 100%;
 }
 
+.db-item.update-error[x-monitor="1"]::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  pointer-events: none;
+  border: solid 4px var(--error);
+}
+
+.db-item.chart .inner {
+  display: flex;
+}
 .db-item.chart .inner > .icon {
   display: none;
 }
@@ -269,48 +366,69 @@
   padding: 0.5rem;
   text-transform: unset;
 }
+.db-item.chart .inner > .content .status {
+  flex-grow: 1;
+}
 
-.db-item.bar-info.xx-large .inner, .db-item.bar-info.x-large .inner {
+.db-item.bar-info.large .content > .title {
+  display: none;
+}
+.db-item.bar-info.large .bar-info:first-of-type {
+  margin-top: 0 !important;
+}
+.db-item.bar-info.xx-large .inner, .db-item.bar-info.x-large .inner, .db-item.bar-info.larger .inner {
   display: flex;
   flex-direction: column;
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  bottom: 0.5rem;
+  bottom: 0;
   overflow: hidden;
 }
-.db-item.bar-info.xx-large .icon, .db-item.bar-info.x-large .icon {
+.db-item.bar-info.xx-large .icon, .db-item.bar-info.x-large .icon, .db-item.bar-info.larger .icon {
   height: 4rem;
   min-height: 4rem;
   max-height: 4rem;
 }
-.db-item.bar-info.xx-large .icon > img, .db-item.bar-info.xx-large .icon i, .db-item.bar-info.x-large .icon > img, .db-item.bar-info.x-large .icon i {
+.db-item.bar-info.xx-large .icon > img, .db-item.bar-info.xx-large .icon i, .db-item.bar-info.x-large .icon > img, .db-item.bar-info.x-large .icon i, .db-item.bar-info.larger .icon > img, .db-item.bar-info.larger .icon i {
   position: absolute;
   left: 1rem;
   top: 0.25rem;
   height: 3.5rem;
   width: 3.5rem;
 }
-.db-item.bar-info.xx-large .content, .db-item.bar-info.x-large .content {
+.db-item.bar-info.xx-large .content, .db-item.bar-info.x-large .content, .db-item.bar-info.larger .content {
   flex-grow: 1;
   overflow: hidden;
   padding: 0 1rem 0 0.5rem;
   justify-content: unset;
 }
-.db-item.bar-info.xx-large .content > .title, .db-item.bar-info.x-large .content > .title {
+.db-item.bar-info.xx-large .content > .title, .db-item.bar-info.x-large .content > .title, .db-item.bar-info.larger .content > .title {
   position: absolute;
   left: 6rem;
   top: 1.4rem;
   width: calc(100% - 7rem);
   display: unset;
 }
-.db-item.bar-info.xx-large .bar-info, .db-item.bar-info.x-large .bar-info {
+.db-item.bar-info.xx-large .bar-info, .db-item.bar-info.x-large .bar-info, .db-item.bar-info.larger .bar-info {
   margin-bottom: 1rem;
   font-weight: 600;
   font-size: 0.85rem;
 }
-.db-item.bar-info.x-large .bar-info:nth-child(n+4) {
+.db-item.bar-info.medium .content > .title, .db-item.bar-info.medium .status {
+  display: none;
+}
+.db-item.bar-info.larger .bar-info {
+  margin: 0.5rem 0 !important;
+}
+.db-item.bar-info.larger .bar-info:nth-child(n+5) {
+  display: none;
+}
+.db-item.bar-info.x-large .bar-info {
+  margin: 0.5rem 0 !important;
+}
+.db-item.bar-info.x-large .bar-info:nth-child(n+5) {
   display: none;
 }
 .db-item.bar-info.large .bar-info:nth-child(n+3) {
@@ -325,3 +443,5 @@
   width: 2rem;
   background-size: cover;
 }
+
+/*# sourceMappingURL=tiles.css.map */

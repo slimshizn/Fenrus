@@ -1,0 +1,64 @@
+@page "/settings/system/system-settings"
+@namespace Fenrus.Pages
+@inherits UserPage
+
+<PageTitle>Fenrus - @lblTitle</PageTitle>
+
+<FenrusPage Title="@lblTitle" Icon="fa-solid fa-gear" PageDescription="@lblDescription">
+    <Buttons>
+        <button class="btn" @onclick="() => ImportConfig()">@lblImportConfig</button>
+        <button class="btn" @onclick="() => UpdateApps()">@lblUpdateApps</button>
+        <button class="btn" @onclick="() => Save()">@lblSave</button>
+    </Buttons>
+    <Body>
+
+    <FenrusTabs>
+        <FenrusTab Title="@lblSmtp">
+            <div style="max-width:60rem">
+            <span class="label">@lblSmtpDescription</span>
+            <InputText Label="@lblSmtpServer" @bind-Value="@Model.SmtpServer"/>
+            <InputNumber Label="@lblSmtpPort" @bind-Value="@Model.SmtpPort" Minimum="1" Maximum="65535"/>
+            <InputText Label="@lblSmtpUser" @bind-Value="@Model.SmtpUser"/>
+            <InputText Label="@lblSmtpPassword" @bind-Value="@SmtpPassword" Password="true"/>
+            <InputText Label="@lblSmtpSender" @bind-Value="@Model.SmtpSender" Help="@lblStmpSenderHelp" Email="true"/>
+            <button disabled="@(CanTestSmtp() == false)" class="btn test-button" @onclick="() => TestSmtp()">@lblTest</button>
+            </div>
+        </FenrusTab>
+        <FenrusTab Title="@lblCloud">
+            <span class="label">@lblCloudDescription</span>
+            <InputSwitch Page="SystemSettings" Label="CloudEnabled" @bind-Value="CloudEnabled"></InputSwitch>
+            @if (CloudEnabled)
+            {
+                <InputSwitch Page="SystemSettings" Label="CloudApps" @bind-Value="CloudApps"></InputSwitch>
+                <InputSwitch Page="SystemSettings" Label="CloudCalendar" @bind-Value="CloudCalendar"></InputSwitch>
+                <InputSwitch Page="SystemSettings" Label="CloudEmail" @bind-Value="CloudEmail"></InputSwitch>
+                <InputSwitch Page="SystemSettings" Label="CloudFiles" @bind-Value="CloudFiles"></InputSwitch>
+                <InputSwitch Page="SystemSettings" Label="CloudNotes" @bind-Value="CloudNotes"></InputSwitch>
+            }
+        </FenrusTab>
+    </FenrusTabs>
+    </Body>
+</FenrusPage>
+
+
+@if (Importing)
+{
+    <div class="blocker visible">
+        <div class="blocker-indicator">
+            <div class="blocker-spinner"></div>
+            <div class="blocker-message">@lblImporting</div>
+        </div>
+    </div>
+}
+
+@if (Updating)
+{
+    <div class="blocker visible">
+        <div class="blocker-indicator">
+            <div class="blocker-spinner"></div>
+            <div class="blocker-message">@lblUpdatingApps</div>
+        </div>
+    </div>
+}
+
+<Fenrus.Components.Dialogs.FileInputDialog @ref="FileInputDialog" Translator="Translator" />

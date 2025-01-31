@@ -1,52 +1,76 @@
-﻿#toast {
-    visibility: hidden;
-    min-width: 250px;
-    margin-left: -125px;
-    background-color: #333;
+.toast {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 320px;
+  max-height: 120px;
+  overflow: hidden;
+  padding: 16px;
+  margin-top: 8px;
+  font-size: 14px;
+  line-height: 1.5;
+  border-radius: 4px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease-in-out;
+
+  &.success {
+    background-color: #28a745;
     color: #fff;
-    text-align: center;
-    border-radius: 2px;
-    padding: 16px;
-    position: fixed;
-    z-index: 2000;
-    left: 50%;
-    top: 30px;
-    font-size: 17px;
-    &.success {
-        background-color:green;
-    }
-    &.failure {
-        background-color:red;
-    }
 
-    &.show {
-        visibility: visible;    
-        animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    i {
+      color: #fff;
     }
-}
+  }
 
+  &.warning {
+    background-color: #ffc107;
+    color: #000;
 
-@keyframes fadein {
-    from {
-        top: 0;
-        opacity: 0;
+    i {
+      color: #000;
     }
+  }
 
-    to {
-        top: 30px;
-        opacity: 1;
+  &.info {
+    background-color: #17a2b8;
+    color: #fff;
+
+    i {
+      color: #fff;
     }
-}
+  }
 
+  &.error {
+    background-color: #dc3545;
+    color: #fff;
 
-@keyframes fadeout {
-    from {
-        top: 30px;
-        opacity: 1;
+    i {
+      color: #fff;
     }
+  }
 
-    to {
-        top: 0;
-        opacity: 0;
+  i {
+    font-size: 24px;
+    margin-right: 16px;
+    opacity: 0.8;
+  }
+
+  .message {
+    flex: 1;
+  }
+
+  .close {
+    cursor: pointer;
+    font-size: 16px;
+    opacity: 0.5;
+    transition: opacity 0.2s ease-in-out;
+
+    &:hover {
+      opacity: 1;
     }
+  }
 }

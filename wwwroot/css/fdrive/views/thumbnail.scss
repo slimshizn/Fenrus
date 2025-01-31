@@ -1,0 +1,54 @@
+#fdrive-list.thumbnail {
+  .file {
+    height:240px;
+    position:relative;
+  }
+  .size, .modified {
+    display:none;
+  }
+  .file.no-img {
+    .icon {
+      background:#222;
+    }
+    .name {
+      display: unset !important;
+    }
+  }
+  .file.folder {
+    cursor:pointer;
+  }
+  .name {
+    position:absolute;
+    display:none;
+    bottom:0;
+    left:0;
+    right:0;
+    line-height: 2rem;
+    background: rgba(var(--base-rgb), 0.8);
+    text-align: center;
+  }
+  .icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .icon, img {
+    width: 100%;
+    height: 100%;
+  }
+  .icon i {
+    font-size:10rem;
+  }
+  img {
+    object-fit: cover;
+  }
+  position: relative;
+  transition: opacity 0.25s ease-in-out;
+
+  .file:hover {
+    opacity: 1;
+    .name {
+      display:unset;
+    }
+  }
+}

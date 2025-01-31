@@ -2,10 +2,9 @@ class ContextMenu {
     contextMenu;
     static otherMenus = [];
 
-    constructor({ target = null, menuItems = [], mode = "dark" }) {
-      this.target = target;
-      this.menuItems = menuItems;
-      this.mode = mode;
+    constructor(args) { //{ target = null, menuItems = [] }) {
+      this.target = args.target;
+      this.menuItems = args.menuItems;
       this.menuItemsNode = this.getMenuItemsNode();
       this.isOpened = false;
       ContextMenu.otherMenus.push(this);
@@ -15,7 +14,6 @@ class ContextMenu {
       const nodes = [];
   
       if (!this.menuItems) {
-        console.error("getMenuItemsNode :: Please enter menu items");
         return [];
       }
   
@@ -38,6 +36,18 @@ class ContextMenu {
       button.innerHTML = data.content;
       button.classList.add("contextMenu-button");
       item.classList.add("contextMenu-item");
+
+      if(data.submenu?.length){
+        const caret = document.createElement('i');
+        caret.className = 'caret fa-solid fa-angle-right';
+        button.appendChild(caret);
+        item.classList.add("has-submenu");
+        const sub = document.createElement('ul');
+        sub.className = 'submenu contextMenuCommon';
+        for(let si of data.submenu)
+          sub.appendChild(this.createItemMarkup(si));
+        item.appendChild(sub);
+      }
   
       if (data.divider) item.setAttribute("data-divider", data.divider);
       item.appendChild(button);
@@ -56,7 +66,7 @@ class ContextMenu {
       const menuContainer = document.createElement("UL");
   
       menuContainer.classList.add("contextMenu");
-      menuContainer.setAttribute("data-theme", this.mode);
+      menuContainer.classList.add("contextMenuCommon");
   
       this.menuItemsNode.forEach((item) => menuContainer.appendChild(item));
   

@@ -1,0 +1,34 @@
+.fdrive-preview .header {
+  display: flex;
+  margin-bottom: 1rem;
+}
+.fdrive-preview .header .title {
+  flex-grow: 1;
+  align-self: center;
+}
+.fdrive-preview .body {
+  flex-grow: 1;
+  display: flex;
+  place-items: center;
+  text-align: center;
+  position: relative;
+  overflow: auto;
+}
+.fdrive-preview .body img {
+  max-width: 100%;
+  max-height: 100%;
+  margin: auto;
+}
+.fdrive-preview .body .text-preview {
+  height: 100%;
+  width: 100%;
+  min-width: 100%;
+  min-height: 100%;
+  text-align: left;
+}
+.fdrive-preview .footer {
+  text-align: center;
+  padding: 0.5rem;
+}
+
+/*# sourceMappingURL=slideshow.css.map */
